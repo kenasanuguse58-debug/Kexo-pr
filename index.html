@@ -21,6 +21,20 @@
   .status-bar{background:var(--surface2);padding:5px 16px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);flex-shrink:0;font-family:'DM Mono',monospace;}
   .status-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+  /* API Key Screen */
+  .api-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:16px;}
+  .api-screen .welcome-logo{width:68px;height:68px;border-radius:50%;overflow:hidden;border:3px solid var(--accent);box-shadow:0 0 20px rgba(74,222,128,0.3);margin-bottom:4px;}
+  .api-screen .welcome-logo img{width:100%;height:100%;object-fit:cover;}
+  .api-screen h2{font-size:20px;font-weight:700;color:var(--accent);}
+  .api-screen p{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;}
+  .api-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:13px;font-family:'DM Mono',monospace;outline:none;}
+  .api-input:focus{border-color:var(--accent);}
+  .api-btn{width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:#0a0a0f;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans Ethiopic',sans-serif;}
+  .api-btn:hover{background:#22c55e;}
+  .api-hint{font-size:11px;color:var(--text-muted);text-align:center;}
+  .api-hint a{color:var(--accent);}
+
   .messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth;}
   .messages::-webkit-scrollbar{width:3px;}
   .messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -49,49 +63,54 @@
   .input-row:focus-within{border-color:var(--accent);}
   #userInput{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:'Noto Sans Ethiopic',sans-serif;resize:none;max-height:100px;min-height:22px;line-height:1.5;}
   #userInput::placeholder{color:var(--text-muted);}
-  .mic-btn{width:34px;height:34px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-size:17px;}
+  .mic-btn{width:34px;height:34px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
   .mic-btn.recording{background:#ff4444;border-color:#ff4444;animation:micPulse 0.8s infinite;}
   @keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-  .send-btn{width:34px;height:34px;background:var(--accent);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;color:#0a0a0f;font-size:15px;font-weight:bold;}
-  .send-btn:hover{background:#22c55e;transform:scale(1.05);}
-  .send-btn:disabled{background:var(--border);cursor:not-allowed;transform:none;color:var(--text-muted);}
+  .send-btn{width:34px;height:34px;background:var(--accent);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0a0a0f;font-size:15px;font-weight:bold;}
+  .send-btn:disabled{background:var(--border);cursor:not-allowed;color:var(--text-muted);}
   .input-hint{font-size:10px;color:var(--text-muted);text-align:center;margin-top:5px;font-family:'DM Mono',monospace;}
-  .welcome{text-align:center;padding:24px 20px;}
-  .welcome-logo{width:68px;height:68px;border-radius:50%;overflow:hidden;margin:0 auto 12px;border:3px solid var(--accent);box-shadow:0 0 20px rgba(74,222,128,0.3);}
-  .welcome-logo img{width:100%;height:100%;object-fit:cover;}
-  .welcome h2{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:0.05em;margin-bottom:3px;}
-  .welcome .creator{font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;margin-bottom:8px;}
-  .welcome p{font-size:13px;color:var(--text-muted);line-height:1.6;}
+  .logout-btn{font-size:11px;color:var(--text-muted);background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 8px;cursor:pointer;}
+  .logout-btn:hover{border-color:#ff4444;color:#ff4444;}
+  .hidden{display:none!important;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="logo">
     <div class="logo-icon"><img id="logoImg" alt="KEXO PR"></div>
     <div><div class="logo-name">KEXO PR</div><div class="logo-sub">by KENASA NUGUSE</div></div>
   </div>
-  <div class="lang-toggle">
-    <button class="lang-btn active" id="btnAm" onclick="setLang('am')">አማርኛ</button>
-    <button class="lang-btn" id="btnEn" onclick="setLang('en')">English</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="logout-btn hidden" id="logoutBtn" onclick="logout()">🔑 Key ቀይር</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnAm" onclick="setLang('am')">አማርኛ</button>
+      <button class="lang-btn" id="btnEn" onclick="setLang('en')">English</button>
+    </div>
   </div>
 </div>
 <div class="status-bar"><div class="status-dot"></div><span id="statusText">ዝግጁ ነኝ • Ready</span></div>
-<div class="messages" id="messages">
-  <div class="welcome">
-    <div class="welcome-logo"><img id="welcomeLogoImg" alt="KEXO PR"></div>
-    <h2>KEXO PR</h2>
-    <div class="creator">Created by KENASA NUGUSE</div>
-    <p>ጥያቄ ጠይቅ፣ ርዕስ አብራራ፣ ትርጉም ጠይቅ<br>Ask anything • ማንኛውም ጥያቄ</p>
-  </div>
+
+<!-- API Key Screen -->
+<div class="api-screen" id="apiScreen">
+  <div class="welcome-logo"><img id="apiLogoImg" alt="KEXO PR"></div>
+  <h2>KEXO PR</h2>
+  <p id="apiDesc">ለመጀመር Anthropic API key ያስፈልጋል።<br>Key ን አንድ ጊዜ ብቻ ታስገባለህ።</p>
+  <input class="api-input" id="apiKeyInput" type="password" placeholder="sk-ant-api03-...">
+  <button class="api-btn" id="apiSubmitBtn" onclick="saveKey()">▶ ጀምር • Start</button>
+  <p class="api-hint">Key ከሌለህ: <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
 </div>
-<div class="quick-prompts">
+
+<!-- Chat Screen -->
+<div class="messages hidden" id="messages"></div>
+<div class="quick-prompts hidden" id="quickPrompts">
   <button class="quick-btn" onclick="sendQuick(this.textContent)">አንተ ማን ነህ?</button>
   <button class="quick-btn" onclick="sendQuick(this.textContent)">Translate to Amharic</button>
   <button class="quick-btn" onclick="sendQuick(this.textContent)">ታሪክ ጻፍልኝ</button>
   <button class="quick-btn" onclick="sendQuick(this.textContent)">Help me with code</button>
   <button class="quick-btn" onclick="sendQuick(this.textContent)">ሒሳብ እርዳኝ</button>
 </div>
-<div class="input-area">
+<div class="input-area hidden" id="inputArea">
   <div class="input-row">
     <button class="mic-btn" id="micBtn" onclick="toggleVoice()">🎤</button>
     <textarea id="userInput" rows="1" placeholder="ጥያቄህን ጻፍ ወይም 🎤 ተጫን..."></textarea>
@@ -99,25 +118,103 @@
   </div>
   <div class="input-hint">🎤 ተጫን ተናገር • Press mic to speak</div>
 </div>
+
 <script>
 const LOGO="data:image/png;base64,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";
-const KEY="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";
 document.getElementById('logoImg').src=LOGO;
-document.getElementById('welcomeLogoImg').src=LOGO;
+document.getElementById('apiLogoImg').src=LOGO;
 
 let lang='am',loading=false,hist=[],rec=null,recording=false;
-const L={am:{s:'ዝግጁ ነኝ • Ready',l:'እያሰብኩ ነው...',p:'ጥያቄህን ጻፍ ወይም 🎤 ተጫን...',y:'አንተ'},en:{s:'Ready',l:'Thinking...',p:'Type or press 🎤...',y:'You'}};
+let API_KEY='';
 
-function setLang(l){lang=l;document.getElementById('btnAm').classList.toggle('active',l==='am');document.getElementById('btnEn').classList.toggle('active',l==='en');document.getElementById('statusText').textContent=L[l].s;document.getElementById('userInput').placeholder=L[l].p;}
-function gt(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+const L={
+  am:{s:'ዝግጁ ነኝ • Ready',l:'እያሰብኩ ነው...',p:'ጥያቄህን ጻፍ ወይም 🎤 ተጫን...',y:'አንተ',
+      apiDesc:'ለመጀመር Anthropic API key ያስፈልጋል።\nKey ን አንድ ጊዜ ብቻ ታስገባለህ።',
+      apiErr:'❌ ልክ ያልሆነ key ነው። እንደገና ሞክር።'},
+  en:{s:'Ready',l:'Thinking...',p:'Type or press 🎤...',y:'You',
+      apiDesc:'Enter your Anthropic API key to start.\nYou only need to enter it once.',
+      apiErr:'❌ Invalid key. Please try again.'}
+};
+
+// Check saved key
+window.onload=()=>{
+  const saved=localStorage.getItem('kexo_key');
+  if(saved){API_KEY=saved;showChat();}
+};
+
+function setLang(l){
+  lang=l;
+  document.getElementById('btnAm').classList.toggle('active',l==='am');
+  document.getElementById('btnEn').classList.toggle('active',l==='en');
+  document.getElementById('statusText').textContent=L[l].s;
+  document.getElementById('apiDesc').textContent=L[l].apiDesc;
+  if(document.getElementById('userInput'))
+    document.getElementById('userInput').placeholder=L[l].p;
+}
+
+async function saveKey(){
+  const key=document.getElementById('apiKeyInput').value.trim();
+  if(!key.startsWith('sk-ant-')){
+    alert(L[lang].apiErr); return;
+  }
+  document.getElementById('apiSubmitBtn').textContent='⏳ እየሞከርኩ ነው...';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:10,messages:[{role:'user',content:'hi'}]})
+    });
+    if(r.ok){
+      API_KEY=key;
+      localStorage.setItem('kexo_key',key);
+      showChat();
+    } else {
+      alert(L[lang].apiErr);
+      document.getElementById('apiSubmitBtn').textContent='▶ ጀምር • Start';
+    }
+  }catch(e){
+    alert(L[lang].apiErr);
+    document.getElementById('apiSubmitBtn').textContent='▶ ጀምር • Start';
+  }
+}
+
+function showChat(){
+  document.getElementById('apiScreen').classList.add('hidden');
+  document.getElementById('messages').classList.remove('hidden');
+  document.getElementById('quickPrompts').classList.remove('hidden');
+  document.getElementById('inputArea').classList.remove('hidden');
+  document.getElementById('logoutBtn').classList.remove('hidden');
+  addWelcome();
+}
+
+function logout(){
+  localStorage.removeItem('kexo_key');
+  API_KEY='';
+  hist=[];
+  document.getElementById('messages').innerHTML='';
+  document.getElementById('apiScreen').classList.remove('hidden');
+  document.getElementById('messages').classList.add('hidden');
+  document.getElementById('quickPrompts').classList.add('hidden');
+  document.getElementById('inputArea').classList.add('hidden');
+  document.getElementById('logoutBtn').classList.add('hidden');
+  document.getElementById('apiKeyInput').value='';
+  document.getElementById('apiSubmitBtn').textContent='▶ ጀምር • Start';
+}
+
+function addWelcome(){
+  const c=document.getElementById('messages');
+  c.innerHTML='<div style="text-align:center;padding:20px"><div style="width:60px;height:60px;border-radius:50%;overflow:hidden;margin:0 auto 10px;border:3px solid var(--accent);box-shadow:0 0 15px rgba(74,222,128,0.3)"><img src="'+LOGO+'" style="width:100%;height:100%;object-fit:cover"></div><div style="font-size:18px;font-weight:700;color:var(--accent)">KEXO PR</div><div style="font-size:11px;color:var(--text-muted);font-family:DM Mono,monospace;margin-bottom:6px">Created by KENASA NUGUSE</div><p style="font-size:13px;color:var(--text-muted)">ጥያቄ ጠይቅ፣ ትርጉም ጠይቅ<br>Ask anything • ማንኛውም ጥያቄ</p></div>';
+}
+
+function getTime(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
 
 function addMsg(role,text){
   const c=document.getElementById('messages');
-  const w=c.querySelector('.welcome');if(w)w.remove();
+  const w=c.querySelector('div[style]');if(w&&role==='user')w.remove();
   const u=role==='user';
   const d=document.createElement('div');d.className='message '+role;
   const av=u?'<div class="avatar user">👤</div>':'<div class="avatar ai"><img src="'+LOGO+'" alt="K"></div>';
-  d.innerHTML=av+'<div><div class="bubble">'+text.replace(/\n/g,'<br>')+'</div><div class="bubble-meta">'+(u?L[lang].y:'KEXO PR')+' • '+gt()+'</div></div>';
+  d.innerHTML=av+'<div><div class="bubble">'+text.replace(/\n/g,'<br>')+'</div><div class="bubble-meta">'+(u?L[lang].y:'KEXO PR')+' • '+getTime()+'</div></div>';
   c.appendChild(d);c.scrollTop=c.scrollHeight;
 }
 
@@ -137,7 +234,7 @@ function toggleVoice(){
     rec.onstart=()=>{recording=true;document.getElementById('micBtn').classList.add('recording');document.getElementById('micBtn').textContent='⏹';document.getElementById('statusText').textContent=lang==='am'?'🎤 እየሰማሁ ነው...':'🎤 Listening...';};
     rec.onresult=(e)=>{let t='';for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;document.getElementById('userInput').value=t;};
     rec.onend=()=>{recording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('micBtn').textContent='🎤';document.getElementById('statusText').textContent=L[lang].s;const t=document.getElementById('userInput').value.trim();if(t)sendMessage();};
-    rec.onerror=(e)=>{recording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('micBtn').textContent='🎤';if(e.error==='not-allowed')alert('Microphone permission required!');};
+    rec.onerror=()=>{recording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('micBtn').textContent='🎤';};
   }
   rec.lang=lang==='am'?'am-ET':'en-US';
   if(recording)rec.stop();else rec.start();
@@ -155,8 +252,8 @@ async function sendMessage(){
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are KEXO PR, a bilingual AI (Amharic & English) created by KENASA NUGUSE. If asked who you are say: "እኔ KEXO PR ነኝ። የሰራኝ KENASA NUGUSE ነው።" Respond in the language the user writes in. Answer ANY question.',messages:hist})
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are KEXO PR, a bilingual AI (Amharic & English) created by KENASA NUGUSE. If asked who you are: "እኔ KEXO PR ነኝ። የሰራኝ KENASA NUGUSE ነው።" Respond in the language the user writes in. Answer ANY question.',messages:hist})
     });
     const d=await r.json();
     const reply=d.content?.map(b=>b.text||'').join('')||'Error.';
